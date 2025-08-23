@@ -1,876 +1,1637 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Mr. E Machine</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        /* Custom scrollbar for better aesthetics in dark mode */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #1f2937; }
-        ::-webkit-scrollbar-thumb { background: #4b5563; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #6b7280; }
-        /* Style for required fields */
-        select:required:invalid, input:required:invalid { border-color: #9ca3af; }
-        /* Modal styles */
-        .modal-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 50; }
-        .modal-content { background: #1f2937; padding: 2rem; border-radius: 0.5rem; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); max-width: 700px; width: 95%; color: #e2e8f0; }
-        .modal-row { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 0.5rem;}
-        /* NEW: Notification Toast Styles */
-        .toast-notification {
-            background-color: #2d3748; /* gray-800 */
-            color: #e2e8f0; /* gray-300 */
-            padding: 1rem;
-            border-radius: 0.5rem;
-            border: 1px solid #4a5568; /* gray-600 */
-            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
-            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
-            opacity: 0;
-            transform: translateX(100%);
-            width: 300px;
+<!-- saved from url=(0070)file:///C:/Users/abrow/Downloads/Mr_E_Machine_v2_2_ShotHistoryFix.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mr. E Machine – v2.2 (Shot History Filter Fix)</title>
+  <script src="./Mr. E Machine – v1.10_files/saved_resource"></script>
+  <style>
+    :root { --gap: 12px; }
+    .grid-gap { display:grid; gap: var(--gap); }
+    .row-2 { grid-template-columns: 1fr 1fr; }
+    .row-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .row-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+    .card { background:#0f172a; border:1px solid #334155; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.25) }
+    .input, select, textarea { width:100%; background:#111827; color:#e5e7eb; border:1px solid #4b5563; border-radius:8px; padding:8px 10px; min-height:40px }
+    input[type="checkbox"]{ width:18px; height:18px }
+    .btn { background:#16a34a; color:#fff; padding:10px 14px; border-radius:10px; border:none; font-weight:700 }
+    .btn:hover { background:#15803d }
+    .btn-sec { background:#2563eb }
+    .btn-sec:hover { background:#1d4ed8 }
+    .btn-danger { background:#b91c1c }
+    .btn-danger:hover { background:#991b1b }
+    .muted { color:#9ca3af }
+    table { width:100%; border-collapse: collapse }
+    th, td { padding:10px; border-bottom:1px solid #374151; text-align:left; vertical-align: top }
+    th { color:#cbd5e1 }
+    .arrow { width:0; height:0; border-left:6px solid transparent; border-right:6px solid transparent; border-bottom:18px solid #22c55e; }
+    .arrow-wrap { width:18px; height:32px; transform-origin: 50% 28px }
+    .toast { position:fixed; right:16px; bottom:16px; padding:12px 14px; background:#0b1220; border:1px solid #374151; border-radius:12px; color:#e5e7eb; opacity:0; transform: translateY(12px); transition: all .35s ease; z-index: 50 }
+    .toast.show { opacity:1; transform: translateY(0) }
+    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    .number-cell input { width: 90px; }
+    @media (max-width: 640px){
+      .row-2, .row-3, .row-4 { grid-template-columns: 1fr; }
+    }
+  </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.mx-auto{margin-left:auto;margin-right:auto}.mb-2{margin-bottom:0.5rem}.mt-2{margin-top:0.5rem}.mt-3{margin-top:0.75rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.ml-1{margin-left:0.25rem}.flex{display:flex}.grid{display:grid}.w-full{width:100%}.max-w-\[1280px\]{max-width:1280px}.max-w-\[240px\]{max-width:240px}.rotate-0{--tw-rotate:0deg;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.flex-wrap{flex-wrap:wrap}.items-end{align-items:flex-end}.items-center{align-items:center}.justify-between{justify-content:space-between}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-6{gap:1.5rem}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.overflow-x-auto{overflow-x:auto}.rounded-full{border-radius:9999px}.bg-slate-900{--tw-bg-opacity:1;background-color:rgb(15 23 42 / var(--tw-bg-opacity, 1))}.bg-emerald-700{--tw-bg-opacity:1;background-color:rgb(4 120 87 / var(--tw-bg-opacity, 1))}.p-4{padding:1rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.text-center{text-align:center}.text-right{text-align:right}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-extrabold{font-weight:800}.text-emerald-200{--tw-text-opacity:1;color:rgb(167 243 208 / var(--tw-text-opacity, 1))}.text-emerald-300{--tw-text-opacity:1;color:rgb(110 231 183 / var(--tw-text-opacity, 1))}.text-slate-100{--tw-text-opacity:1;color:rgb(241 245 249 / var(--tw-text-opacity, 1))}.text-slate-400{--tw-text-opacity:1;color:rgb(148 163 184 / var(--tw-text-opacity, 1))}.text-emerald-100{--tw-text-opacity:1;color:rgb(209 250 229 / var(--tw-text-opacity, 1))}@media (min-width: 768px){.md\:grid-cols-6{grid-template-columns:repeat(6, minmax(0, 1fr))}}@media (min-width: 1024px){.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}}</style></head>
+<body class="bg-slate-900 text-slate-100">
+  <div class="max-w-[1280px] mx-auto p-4 space-y-6">
+    <header class="text-center">
+      <h1 class="text-3xl font-extrabold text-emerald-300">Mr. E Machine</h1>
+      <p class="text-emerald-200 text-sm">Yabba Dabba Doo! HIO for you.</p>
+      <p class="text-slate-400 text-sm">Total Shots Saved: <b id="totalShots">74</b> • HIO Rate: <b id="hioRate">48.6%</b></p>
+    </header>
+
+    <section class="grid lg:grid-cols-3 gap-6">
+      <!-- Log a New Shot -->
+      <div class="card p-4">
+        <h2 class="text-xl font-bold mb-2">Log a New Shot</h2>
+        <form id="shotForm" class="grid-gap">
+          <div class="grid-gap row-2">
+            <div>
+              <label class="text-xs muted" for="holeNumber">Hole</label>
+              <select id="holeNumber" class="input" required=""><option value="1">Hole 1</option><option value="2">Hole 2</option><option value="3">Hole 3</option><option value="4">Hole 4</option><option value="5">Hole 5</option><option value="6">Hole 6</option><option value="7">Hole 7</option><option value="8">Hole 8</option><option value="9">Hole 9</option><option value="10">Hole 10</option><option value="11">Hole 11</option><option value="12">Hole 12</option><option value="13">Hole 13</option><option value="14">Hole 14</option><option value="15">Hole 15</option><option value="16">Hole 16</option><option value="17">Hole 17</option><option value="18">Hole 18</option><option value="19">Hole 19</option><option value="20">Hole 20</option><option value="21">Hole 21</option></select>
+            </div>
+            <div>
+              <label class="text-xs muted" for="pinPosition">Pin</label>
+              <select id="pinPosition" class="input" required=""><option value="front-left">front left</option><option value="front-middle">front middle</option><option value="front-right">front right</option><option value="middle-left">middle left</option><option value="middle-middle">middle middle</option><option value="middle-right">middle right</option><option value="back-left">back left</option><option value="back-middle">back middle</option><option value="back-right">back right</option></select>
+            </div>
+          </div>
+
+          <div class="grid-gap row-3">
+            <div>
+              <label class="text-xs muted" for="yardage">Yardage</label>
+              <input id="yardage" type="number" step="0.01" class="input" required="">
+            </div>
+            <div>
+              <label class="text-xs muted" for="club">Club</label>
+              <select id="club" class="input" required=""><option value="Driver">Driver</option><option value="Spoon">Spoon</option><option value="3">3</option><option value="5">5</option><option value="7">7</option><option value="9">9</option><option value="Wedge">Wedge</option><option value="Putter">Putter</option></select>
+            </div>
+            <div>
+              <label class="text-xs muted" for="power">Power (0.00–4.00)</label>
+              <input id="power" type="number" min="0" max="4" step="0.01" class="input" required="">
+            </div>
+          </div>
+
+          <div class="grid-gap row-4">
+            <div>
+              <label class="text-xs muted" for="windSpeed">Wind (mph)</label>
+              <input id="windSpeed" type="number" step="0.01" class="input" required="">
+            </div>
+            <div>
+              <label class="text-xs muted" for="windAngle">Wind Angle (°)</label>
+              <input id="windAngle" type="number" step="0.01" class="input" required="">
+            </div>
+            <div class="flex items-end gap-3">
+              <div class="text-xs muted">Direction</div>
+              <div id="logWindArrow" class="arrow-wrap rotate-0"><div class="arrow"></div></div>
+            </div>
+            <div>
+              <label class="text-xs muted" for="lie">Lie</label>
+              <select id="lie" class="input">
+                <option>Fairway</option>
+                <option>Rough</option>
+                <option>Bunker</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid-gap row-3">
+            <div>
+              <label class="text-xs muted" for="aimSquares">Aim (squares)</label>
+              <input id="aimSquares" type="number" step="0.01" class="input" required="">
+            </div>
+            <div>
+              <label class="text-xs muted" for="backspin">Backspin</label>
+              <select id="backspin" class="input" required=""><option value="0">None</option><option value="1">Some</option><option value="2">A wee bit</option><option value="3">MAX!</option></select>
+            </div>
+            <div>
+              <label class="text-xs muted" for="elevationPct">Elevation % of 0 (1.00–10.00)</label>
+              <input id="elevationPct" type="number" step="0.01" min="1" max="10" class="input" placeholder="e.g., 2.50">
+            </div>
+          </div>
+
+          <div class="grid-gap row-3">
+            <div>
+              <label class="text-xs muted" for="resultDistance">Result (yards)</label>
+              <input id="resultDistance" type="number" step="0.01" class="input" required="">
+            </div>
+            <div class="flex items-end gap-3">
+              <input id="holeInOne" type="checkbox">
+              <label for="holeInOne" class="muted text-sm">Hole in One!</label>
+            </div>
+            <div class="grid-gap">
+              <label class="flex items-center gap-2">
+                <input id="excludePrediction" type="checkbox">
+                <span class="muted text-sm">Exclude from Optimal Prediction</span>
+              </label>
+              <label class="flex items-center gap-2">
+                <input id="driverAim" type="checkbox">
+                <span class="muted text-sm">Log for Driver AIM</span>
+              </label>
+            </div>
+          </div>
+
+          <div>
+            <label class="text-xs muted" for="notes">Notes</label>
+            <textarea id="notes" rows="2" class="input"></textarea>
+          </div>
+
+          <button class="btn w-full" type="submit">Log Shot</button>
+        </form>
+      </div>
+
+      <!-- Optimal Shot Prediction + Data Management -->
+      <div class="card p-4">
+        <h2 class="text-xl font-bold mb-2">Optimal Shot Prediction</h2>
+        <form id="predictForm" class="grid-gap">
+          <div class="grid-gap row-2">
+            <div>
+              <label class="text-xs muted" for="predHole">Hole</label>
+              <select id="predHole" class="input"><option value="1">Hole 1</option><option value="2">Hole 2</option><option value="3">Hole 3</option><option value="4">Hole 4</option><option value="5">Hole 5</option><option value="6">Hole 6</option><option value="7">Hole 7</option><option value="8">Hole 8</option><option value="9">Hole 9</option><option value="10">Hole 10</option><option value="11">Hole 11</option><option value="12">Hole 12</option><option value="13">Hole 13</option><option value="14">Hole 14</option><option value="15">Hole 15</option><option value="16">Hole 16</option><option value="17">Hole 17</option><option value="18">Hole 18</option><option value="19">Hole 19</option><option value="20">Hole 20</option><option value="21">Hole 21</option></select>
+            </div>
+            <div>
+              <label class="text-xs muted" for="predPin">Pin</label>
+              <select id="predPin" class="input"><option value="front-left">front left</option><option value="front-middle">front middle</option><option value="front-right">front right</option><option value="middle-left">middle left</option><option value="middle-middle">middle middle</option><option value="middle-right">middle right</option><option value="back-left">back left</option><option value="back-middle">back middle</option><option value="back-right">back right</option></select>
+            </div>
+          </div>
+          <div class="grid-gap row-3">
+            <div>
+              <label class="text-xs muted" for="predYardage">Yardage</label>
+              <input id="predYardage" type="number" step="0.01" class="input">
+            </div>
+            <div>
+              <label class="text-xs muted" for="predWindSpeed">Wind (mph)</label>
+              <input id="predWindSpeed" type="number" step="0.01" class="input">
+            </div>
+            <div>
+              <label class="text-xs muted" for="predWindAngle">Wind Angle (°)</label>
+              <input id="predWindAngle" type="number" step="0.01" class="input">
+            </div>
+          </div>
+          <div class="flex items-center gap-3">
+            <div id="predWindArrow" class="arrow-wrap rotate-0"><div class="arrow"></div></div>
+            <button class="btn-sec btn" type="button" id="btnPredict">Predict</button>
+          </div>
+          <div id="predictionResult" class="mt-2 text-sm muted"></div>
+        </form>
+
+        <div class="mt-6">
+          <h3 class="font-bold mb-2">Data Management</h3>
+          <div class="flex flex-wrap gap-2">
+            <button id="btnExport" class="btn-sec btn" type="button">Export</button>
+            <button id="btnImport" class="btn" type="button" style="background:#7c3aed">Import</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Club Factor -->
+      <div class="card p-4">
+        <h2 class="text-xl font-bold mb-2">Club Factor</h2>
+        <div class="grid-gap row-4">
+          <div>
+            <label class="text-xs muted" for="cfHole">Hole</label>
+            <select id="cfHole" class="input"><option value="1">Hole 1</option><option value="2">Hole 2</option><option value="3">Hole 3</option><option value="4">Hole 4</option><option value="5">Hole 5</option><option value="6">Hole 6</option><option value="7">Hole 7</option><option value="8">Hole 8</option><option value="9">Hole 9</option><option value="10">Hole 10</option><option value="11">Hole 11</option><option value="12">Hole 12</option><option value="13">Hole 13</option><option value="14">Hole 14</option><option value="15">Hole 15</option><option value="16">Hole 16</option><option value="17">Hole 17</option><option value="18">Hole 18</option><option value="19">Hole 19</option><option value="20">Hole 20</option><option value="21">Hole 21</option></select>
+          </div>
+          <div>
+            <label class="text-xs muted" for="cfPin">Pin</label>
+            <select id="cfPin" class="input"><option value="front-left">front left</option><option value="front-middle">front middle</option><option value="front-right">front right</option><option value="middle-left">middle left</option><option value="middle-middle">middle middle</option><option value="middle-right">middle right</option><option value="back-left">back left</option><option value="back-middle">back middle</option><option value="back-right">back right</option></select>
+          </div>
+          <div>
+            <label class="text-xs muted" for="cfClub">Club</label>
+            <select id="cfClub" class="input"><option value="Driver">Driver</option><option value="Spoon">Spoon</option><option value="3">3</option><option value="5">5</option><option value="7">7</option><option value="9">9</option><option value="Wedge">Wedge</option><option value="Putter">Putter</option></select>
+          </div>
+          <div>
+            <label class="text-xs muted" for="cfPower">Power (0.00–4.00)</label>
+            <input id="cfPower" type="number" step="0.01" min="0" max="4" class="input">
+          </div>
+        </div>
+
+        <div class="grid-gap row-3 mt-2">
+          <div>
+            <label class="text-xs muted">Crosswind (mph)</label>
+            <div class="mono" id="cfCrosswind">0.00</div>
+          </div>
+          <div>
+            <label class="text-xs muted">Head/Tailwind (mph)</label>
+            <div class="mono" id="cfHeadTail">0.00</div>
+          </div>
+          <div class="flex items-end gap-3">
+            <div class="text-xs muted">Direction</div>
+            <div id="cfArrow" class="arrow-wrap rotate-0"><div class="arrow"></div></div>
+          </div>
+        </div>
+
+        <div class="mt-3">
+          <label class="text-xs muted" for="cfNotes">Hole Notes (saved per Hole)</label>
+          <textarea id="cfNotes" rows="3" class="input"></textarea>
+          <div class="text-right mt-2"><button id="saveHoleNotes" class="btn" type="button">Save Notes</button></div>
+        </div>
+
+        <div class="mt-4 overflow-x-auto">
+          <table id="cfTable">
+            <thead>
+              <tr>
+                <th>Power</th>
+                <th>Crosswind</th>
+                <th>AIM (Squares)</th>
+                <th>Factor</th>
+              </tr>
+            </thead>
+            <tbody><tr>
+          <td class="mono">2.00</td>
+          <td class="mono">0.00</td>
+          <td class="mono">0.00</td>
+          <td class="number-cell">
+            <input data-cfkey="1_front-left_Driver_2.00" type="number" step="0.01" value="1.00" class="input">
+          </td></tr><tr>
+          <td class="mono">2.10</td>
+          <td class="mono">0.00</td>
+          <td class="mono">0.00</td>
+          <td class="number-cell">
+            <input data-cfkey="1_front-left_Driver_2.10" type="number" step="0.01" value="1.00" class="input">
+          </td></tr><tr>
+          <td class="mono">2.20</td>
+          <td class="mono">0.00</td>
+          <td class="mono">0.00</td>
+          <td class="number-cell">
+            <input data-cfkey="1_front-left_Driver_2.20" type="number" step="0.01" value="1.00" class="input">
+          </td></tr><tr>
+          <td class="mono">2.30</td>
+          <td class="mono">0.00</td>
+          <td class="mono">0.00</td>
+          <td class="number-cell">
+            <input data-cfkey="1_front-left_Driver_2.30" type="number" step="0.01" value="1.00" class="input">
+          </td></tr><tr>
+          <td class="mono">2.40</td>
+          <td class="mono">0.00</td>
+          <td class="mono">0.00</td>
+          <td class="number-cell">
+            <input data-cfkey="1_front-left_Driver_2.40" type="number" step="0.01" value="1.00" class="input">
+          </td></tr><tr>
+          <td class="mono">2.50</td>
+          <td class="mono">0.00</td>
+          <td class="mono">0.00</td>
+          <td class="number-cell">
+            <input data-cfkey="1_front-left_Driver_2.50" type="number" step="0.01" value="1.00" class="input">
+          </td></tr><tr>
+          <td class="mono">2.60</td>
+          <td class="mono">0.00</td>
+          <td class="mono">0.00</td>
+          <td class="number-cell">
+            <input data-cfkey="1_front-left_Driver_2.60" type="number" step="0.01" value="1.00" class="input">
+          </td></tr><tr>
+          <td class="mono">2.70</td>
+          <td class="mono">0.00</td>
+          <td class="mono">0.00</td>
+          <td class="number-cell">
+            <input data-cfkey="1_front-left_Driver_2.70" type="number" step="0.01" value="1.00" class="input">
+          </td></tr><tr>
+          <td class="mono">2.80</td>
+          <td class="mono">0.00</td>
+          <td class="mono">0.00</td>
+          <td class="number-cell">
+            <input data-cfkey="1_front-left_Driver_2.80" type="number" step="0.01" value="1.00" class="input">
+          </td></tr><tr>
+          <td class="mono">2.90</td>
+          <td class="mono">0.00</td>
+          <td class="mono">0.00</td>
+          <td class="number-cell">
+            <input data-cfkey="1_front-left_Driver_2.90" type="number" step="0.01" value="1.00" class="input">
+          </td></tr><tr>
+          <td class="mono">3.00</td>
+          <td class="mono">0.00</td>
+          <td class="mono">0.00</td>
+          <td class="number-cell">
+            <input data-cfkey="1_front-left_Driver_3.00" type="number" step="0.01" value="1.00" class="input">
+          </td></tr></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Shot History -->
+    <section class="card p-4">
+      <div class="flex items-center justify-between flex-wrap gap-3">
+        <h2 class="text-xl font-bold">Shot History</h2>
+        <form id="historyFilter" class="grid-gap md:grid-cols-6">
+          <div>
+            <label class="text-xs muted">Hole</label>
+            <select id="fHole" class="input"><option value="all">All</option><option value="1">Hole 1</option><option value="2">Hole 2</option><option value="3">Hole 3</option><option value="4">Hole 4</option><option value="5">Hole 5</option><option value="6">Hole 6</option><option value="7">Hole 7</option><option value="8">Hole 8</option><option value="9">Hole 9</option><option value="10">Hole 10</option><option value="11">Hole 11</option><option value="12">Hole 12</option><option value="13">Hole 13</option><option value="14">Hole 14</option><option value="15">Hole 15</option><option value="16">Hole 16</option><option value="17">Hole 17</option><option value="18">Hole 18</option><option value="19">Hole 19</option><option value="20">Hole 20</option><option value="21">Hole 21</option></select>
+          </div>
+          <div>
+            <label class="text-xs muted">Pin</label>
+            <select id="fPin" class="input"><option value="all">All</option><option value="front-left">front left</option><option value="front-middle">front middle</option><option value="front-right">front right</option><option value="middle-left">middle left</option><option value="middle-middle">middle middle</option><option value="middle-right">middle right</option><option value="back-left">back left</option><option value="back-middle">back middle</option><option value="back-right">back right</option></select>
+          </div>
+          <div>
+            <label class="text-xs muted">Yardage range</label>
+            <div class="grid-gap row-2">
+              <input id="yMin" class="input" type="number" step="0.01" placeholder="min">
+              <input id="yMax" class="input" type="number" step="0.01" placeholder="max">
+            </div>
+          </div>
+          <div>
+            <label class="text-xs muted">Wind angle (°)</label>
+            <div class="grid-gap row-2">
+              <input id="aMin" class="input" type="number" step="0.01" placeholder="min">
+              <input id="aMax" class="input" type="number" step="0.01" placeholder="max">
+            </div>
+          </div>
+          <div>
+            <label class="text-xs muted">Wind speed (mph)</label>
+            <div class="grid-gap row-2">
+              <input id="sMin" class="input" type="number" step="0.01" placeholder="min">
+              <input id="sMax" class="input" type="number" step="0.01" placeholder="max">
+            </div>
+          </div>
+          <div>
+            <label class="text-xs muted">Lie / AIM</label>
+            <div class="grid-gap row-2">
+              <select id="fLie" class="input">
+                <option value="all">All lies</option>
+                <option>Fairway</option>
+                <option>Rough</option>
+                <option>Bunker</option>
+              </select>
+              <label class="flex items-center gap-2">
+                <input type="checkbox" id="fDriverAim">
+                <span class="muted text-sm">Driver AIM</span>
+              </label>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="overflow-x-auto mt-3">
+        <table id="historyTable">
+          <thead>
+            <tr>
+              <th>Hole</th><th>Pin</th><th>Club</th><th>Power</th><th>Aim</th><th>Yardage</th>
+              <th>Wind</th><th>Result</th><th>Backspin</th><th>Lie</th><th>Notes</th><th></th>
+            </tr>
+          </thead>
+          <tbody><tr>
+          <td>1</td>
+          <td>front left</td>
+          <td>9</td>
+          <td class="text-center">3.05</td>
+          <td class="text-center">0.00</td>
+          <td class="text-center">93.0y</td>
+          <td><div class="flex items-center gap-2"><div class="arrow-wrap" style="transform:rotate(0deg)"><div class="arrow"></div></div><span class="muted">0.00 mph @ 0°</span></div></td>
+          <td>0.0y</td>
+          <td>None</td>
+          <td>Fairway</td>
+          <td class="max-w-[240px]"></td>
+          <td class="text-right">
+            <button class="btn-sec btn px-3 py-1" data-edit="c1ecad31-b314-4156-8f32-254e0e0553fe">Edit</button>
+            <button class="btn-danger btn px-3 py-1 ml-1" data-del="c1ecad31-b314-4156-8f32-254e0e0553fe">Delete</button>
+          </td></tr><tr>
+          <td>1</td>
+          <td>front left</td>
+          <td>9</td>
+          <td class="text-center">3.10</td>
+          <td class="text-center">0.00</td>
+          <td class="text-center">95.0y</td>
+          <td><div class="flex items-center gap-2"><div class="arrow-wrap" style="transform:rotate(0deg)"><div class="arrow"></div></div><span class="muted">0.00 mph @ 0°</span></div></td>
+          <td>0.0y</td>
+          <td>None</td>
+          <td>Fairway</td>
+          <td class="max-w-[240px]"></td>
+          <td class="text-right">
+            <button class="btn-sec btn px-3 py-1" data-edit="b24a08c9-d3e9-4f27-991f-1d7122d2a13b">Edit</button>
+            <button class="btn-danger btn px-3 py-1 ml-1" data-del="b24a08c9-d3e9-4f27-991f-1d7122d2a13b">Delete</button>
+          </td></tr><tr>
+          <td>1</td>
+          <td>front left</td>
+          <td>9</td>
+          <td class="text-center">3.10</td>
+          <td class="text-center">0.00</td>
+          <td class="text-center">96.0y</td>
+          <td><div class="flex items-center gap-2"><div class="arrow-wrap" style="transform:rotate(0deg)"><div class="arrow"></div></div><span class="muted">0.00 mph @ 0°</span></div></td>
+          <td>0.0y</td>
+          <td>None</td>
+          <td>Fairway</td>
+          <td class="max-w-[240px]">dead aim</td>
+          <td class="text-right">
+            <button class="btn-sec btn px-3 py-1" data-edit="9kvE76kV8GDfj0QOjH9k">Edit</button>
+            <button class="btn-danger btn px-3 py-1 ml-1" data-del="9kvE76kV8GDfj0QOjH9k">Delete</button>
+          </td></tr><tr>
+          <td>1</td>
+          <td>front left</td>
+          <td>Driver</td>
+          <td class="text-center">0.70</td>
+          <td class="text-center">0.00</td>
+          <td class="text-center">75.0y</td>
+          <td><div class="flex items-center gap-2"><div class="arrow-wrap" style="transform:rotate(0deg)"><div class="arrow"></div></div><span class="muted">11.00 mph @ 0°</span></div></td>
+          <td><span class="px-2 rounded-full bg-emerald-700 text-emerald-100">HIO!</span></td>
+          <td>None</td>
+          <td>Fairway</td>
+          <td class="max-w-[240px]">Power is .75</td>
+          <td class="text-right">
+            <button class="btn-sec btn px-3 py-1" data-edit="3TMpdB4b8ZigMSHPLk9k">Edit</button>
+            <button class="btn-danger btn px-3 py-1 ml-1" data-del="3TMpdB4b8ZigMSHPLk9k">Delete</button>
+          </td></tr><tr>
+          <td>1</td>
+          <td>front left</td>
+          <td>Driver</td>
+          <td class="text-center">0.70</td>
+          <td class="text-center">0.00</td>
+          <td class="text-center">75.0y</td>
+          <td><div class="flex items-center gap-2"><div class="arrow-wrap" style="transform:rotate(0deg)"><div class="arrow"></div></div><span class="muted">11.00 mph @ 0°</span></div></td>
+          <td><span class="px-2 rounded-full bg-emerald-700 text-emerald-100">HIO!</span></td>
+          <td>None</td>
+          <td>Fairway</td>
+          <td class="max-w-[240px]">Power is .75</td>
+          <td class="text-right">
+            <button class="btn-sec btn px-3 py-1" data-edit="3TMpdB4b8ZigMSHPLk9k">Edit</button>
+            <button class="btn-danger btn px-3 py-1 ml-1" data-del="3TMpdB4b8ZigMSHPLk9k">Delete</button>
+          </td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- DRIVER AIM -->
+    <section class="card p-4">
+      <h2 class="text-xl font-bold mb-2">DRIVER AIM</h2>
+      <div class="grid-gap row-2">
+        <div>
+          <label class="text-xs muted" for="daHole">Hole</label>
+          <select id="daHole" class="input"><option value="1">Hole 1</option><option value="2">Hole 2</option><option value="3">Hole 3</option><option value="4">Hole 4</option><option value="5">Hole 5</option><option value="6">Hole 6</option><option value="7">Hole 7</option><option value="8">Hole 8</option><option value="9">Hole 9</option><option value="10">Hole 10</option><option value="11">Hole 11</option><option value="12">Hole 12</option><option value="13">Hole 13</option><option value="14">Hole 14</option><option value="15">Hole 15</option><option value="16">Hole 16</option><option value="17">Hole 17</option><option value="18">Hole 18</option><option value="19">Hole 19</option><option value="20">Hole 20</option><option value="21">Hole 21</option></select>
+        </div>
+        <div class="flex items-end gap-2">
+          <button id="daNew" class="btn" type="button">New Note</button>
+          <button id="daSave" class="btn-sec btn" type="button">Save</button>
+          <button id="daDelete" class="btn-danger btn" type="button">Delete</button>
+        </div>
+      </div>
+      <div class="mt-3">
+        <label class="text-xs muted" for="daNotes">Notes</label>
+        <textarea id="daNotes" rows="3" class="input" placeholder="Driver aim off the tee…"></textarea>
+      </div>
+    </section>
+  </div>
+
+  <div id="toast" class="toast">Saved</div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+    import { getFirestore, doc, setDoc, onSnapshot, collection, query, serverTimestamp, writeBatch, deleteDoc, updateDoc, getDoc, where, getDocs } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+    const firebaseConfigStringCanvas = typeof __firebase_config !== 'undefined' ? __firebase_config : '{"apiKey":"AIzaSyD8jfbEPB0dVPZTn6mGy9ggKcon-H2H3co","authDomain":"gemini-v1-9a33d.firebaseapp.com","projectId":"gemini-v1-9a33d","storageBucket":"gemini-v1-9a33d.firebase-storage.app","messagingSenderId":"334684620391","appId":"1:334684620391:web:78a48a6016dea61fcb36c2"}';
+    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
+    let app, db, auth, userId;
+    let golfData = {};
+    let clubFactors = {};
+    let holeNotesCache = {};
+    let currentEditingShotId = null;
+
+    const toast = document.getElementById('toast');
+    function toastMsg(msg){ toast.textContent = msg; toast.classList.add('show'); setTimeout(()=>toast.classList.remove('show'), 1600) }
+    function rotate(el, deg){ if(el) el.style.transform = `rotate(${Number(deg||0)}deg)`; }
+    function opt(t, v){ const o=document.createElement('option'); o.textContent=t; o.value=v; return o; }
+
+    const BACKSPIN = [ {text:'None', value:0}, {text:'Some', value:1}, {text:'A wee bit', value:2}, {text:'MAX!', value:3} ];
+    const getBackspinText = (v) => (BACKSPIN.find(o=>o.value===Number(v))||{text:'N/A'}).text;
+    const CLUBS = ["Driver","Spoon","3","5","7","9","Wedge","Putter"];
+    const PINS = ["front-left","front-middle","front-right","middle-left","middle-middle","middle-right","back-left","back-middle","back-right"];
+
+    // Log Shot refs
+    const holeNumber = document.getElementById('holeNumber');
+    const pinPosition = document.getElementById('pinPosition');
+    const yardage = document.getElementById('yardage');
+    const club = document.getElementById('club');
+    const power = document.getElementById('power');
+    const windSpeed = document.getElementById('windSpeed');
+    const windAngle = document.getElementById('windAngle');
+    const logWindArrow = document.getElementById('logWindArrow');
+    const aimSquares = document.getElementById('aimSquares');
+    const backspin = document.getElementById('backspin');
+    const lie = document.getElementById('lie');
+    const elevationPct = document.getElementById('elevationPct');
+    const resultDistance = document.getElementById('resultDistance');
+    const holeInOne = document.getElementById('holeInOne');
+    const notes = document.getElementById('notes');
+    const excludePrediction = document.getElementById('excludePrediction');
+    const driverAim = document.getElementById('driverAim');
+    const shotForm = document.getElementById('shotForm');
+
+    // Prediction
+    const predHole = document.getElementById('predHole');
+    const predPin = document.getElementById('predPin');
+    const predYardage = document.getElementById('predYardage');
+    const predWindSpeed = document.getElementById('predWindSpeed');
+    const predWindAngle = document.getElementById('predWindAngle');
+    const predWindArrow = document.getElementById('predWindArrow');
+    const predictionResult = document.getElementById('predictionResult');
+    const btnPredict = document.getElementById('btnPredict');
+
+    // Club Factor
+    const cfHole = document.getElementById('cfHole');
+    const cfPin = document.getElementById('cfPin');
+    const cfClub = document.getElementById('cfClub');
+    const cfPower = document.getElementById('cfPower');
+    const cfCrosswind = document.getElementById('cfCrosswind');
+    const cfHeadTail = document.getElementById('cfHeadTail');
+    const cfArrow = document.getElementById('cfArrow');
+    const cfNotes = document.getElementById('cfNotes');
+    const saveHoleNotes = document.getElementById('saveHoleNotes');
+    const cfTableBody = document.querySelector('#cfTable tbody');
+
+    // History + filters
+    const historyTableBody = document.querySelector('#historyTable tbody');
+    const fHole = document.getElementById('fHole');
+    const fPin = document.getElementById('fPin');
+    const yMin = document.getElementById('yMin');
+    const yMax = document.getElementById('yMax');
+    const aMin = document.getElementById('aMin');
+    const aMax = document.getElementById('aMax');
+    const sMin = document.getElementById('sMin');
+    const sMax = document.getElementById('sMax');
+    const fLie = document.getElementById('fLie');
+    const fDriverAim = document.getElementById('fDriverAim');
+
+    // Driver Aim
+    const daHole = document.getElementById('daHole');
+    const daNotes = document.getElementById('daNotes');
+    const daNew = document.getElementById('daNew');
+    const daSave = document.getElementById('daSave');
+    const daDelete = document.getElementById('daDelete');
+
+    // Stats
+    const totalShotsEl = document.getElementById('totalShots');
+    const hioRateEl = document.getElementById('hioRate');
+
+    async function initFirebase(){
+      try{
+        const firebaseConfig = JSON.parse(firebaseConfigStringCanvas);
+        app = initializeApp(firebaseConfig);
+        db = getFirestore(app);
+        auth = getAuth(app);
+        if (initialAuthToken) {
+          await signInWithCustomToken(auth, initialAuthToken);
+        } else {
+          await signInAnonymously(auth);
         }
-        .toast-notification.show {
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* Small editable-number style */
-        .editable-num { display: inline-block; min-width: 60px; padding: 4px 6px; background: rgba(255,255,255,0.03); border-radius: 4px; }
-    </style>
-    <script type="module">
-        // --- Firebase Imports ---
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, setDoc, onSnapshot, collection, query, serverTimestamp, writeBatch, deleteDoc, updateDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-
-        // --- Config & Globals ---
-        const firebaseConfigStringCanvas = typeof __firebase_config !== 'undefined' ? __firebase_config : '{"apiKey":"AIzaSyD8jfbEPB0dVPZTn6mGy9ggKcon-H2H3co","authDomain":"gemini-v1-9a33d.firebaseapp.com","projectId":"gemini-v1-9a33d","storageBucket":"gemini-v1-9a33d.firebasestorage.app","messagingSenderId":"334684620391","appId":"1:334684620391:web:78a48a6016dea61fcb36c2"}';
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-
-        let app, db, auth, userId;
-        let golfData = {};
-        let clubFactors = {}; // store club factors loaded from firestore by key
-        let currentEditingShotId = null;
-
-        // DOM references (some may initialize to null until DOMContentLoaded)
-        let shotForm, shotTableBody, holeFilter, pinFilter, clubFilter, statusMessage, totalShotsDisplay, successRateDisplay, importButton, exportButton, predHoleNumberInput, predPinPositionInput, knownShotsPanel, totalShotsCounter;
-        let clubFactorForm, clubFactorHoleSelect, clubFactorPinSelect, clubFactorClubSelect, clubFactorPowerInput, clubFactorTableBody, clubFactorSaveButton;
-
-        // --- UI Constants ---
-        const NUM_HOLES = 21;
-        const PIN_POSITIONS = ["front-left", "front-middle", "front-right", "middle-left", "middle-middle", "middle-right", "back-left", "back-middle", "back-right"];
-        const CLUBS = ["Driver", "Spoon", "3", "5", "7", "9", "Wedge", "Putter"];
-        const BACKSPIN_OPTIONS = [ { text: "none", value: 0 }, { text: "stop", value: 1 }, { text: "a wee bit", value: 2 }, { text: "some", value: 3 }, { text: "MAX!", value: 4 }];
-        const getBackspinText = (value) => BACKSPIN_OPTIONS.find(opt => opt.value === value)?.text || 'N/A';
-
-        // Base multipliers used if no saved multiplier exists for a specific (hole_pin_club_power)
-        const BASE_MULTIPLIERS = {
-            "Driver": 0.45,
-            "Spoon": 0.55,
-            "3": 0.70,
-            "5": 0.85,
-            "7": 1.00,
-            "9": 1.20,
-            "Wedge": 1.35,
-            "Putter": 0.30
-        };
-
-        // --- Initialization ---
-        const init = async () => {
-            try {
-                const firebaseConfig = JSON.parse(firebaseConfigStringCanvas);
-                app = initializeApp(firebaseConfig);
-                db = getFirestore(app);
-                auth = getAuth(app);
-                onAuthStateChanged(auth, user => {
-                    if (user) {
-                        userId = user.uid;
-                        setupDataListeners();
-                    } else {
-                        signInAnonymously(auth).catch(error => console.error("Anonymous sign-in failed:", error));
-                    }
-                });
-            } catch (error) {
-                console.error("Firebase initialization failed:", error);
-                if (statusMessage) statusMessage.textContent = "Error connecting to the database.";
-            }
-        };
-
-        const setupDataListeners = () => {
-            if (!userId) return;
-
-            const shotsQuery = query(collection(db, `artifacts/${appId}/users/${userId}/shots`));
-            onSnapshot(shotsQuery, (snapshot) => {
-                golfData = {};
-                snapshot.forEach(docSnap => {
-                    golfData[docSnap.id] = { id: docSnap.id, ...docSnap.data() };
-                });
-                if (totalShotsCounter) totalShotsCounter.textContent = Object.keys(golfData).length;
-                updateUI();
-            }, (error) => {
-                console.error("Error in shots snapshot listener:", error);
-            });
-
-            const clubFactorsQuery = query(collection(db, `artifacts/${appId}/users/${userId}/clubFactors`));
-            onSnapshot(clubFactorsQuery, (snapshot) => {
-                clubFactors = {};
-                snapshot.forEach(docSnap => {
-                    // store by doc id (we will use keys like hole_pin_club_power)
-                    clubFactors[docSnap.id] = docSnap.data().factor;
-                });
-                updateUI();
-                updateClubFactorPanel();
-            }, (error) => {
-                console.error("Error in club factors snapshot listener:", error);
-            });
-        };
-
-        // --- Dropdown population ---
-        function populateDropdowns(prefix = '') {
-            const holeSelect = document.getElementById(`${prefix}holeNumber`);
-            const pinSelect = document.getElementById(`${prefix}pinPosition`);
-            const clubSelect = document.getElementById(`${prefix}club`);
-            const backspinSelect = document.getElementById(`${prefix}backspin`);
-
-            if (holeSelect) {
-                holeSelect.innerHTML = '';
-                for (let i = 1; i <= NUM_HOLES; i++) {
-                    holeSelect.add(new Option(`Hole ${i}`, i));
-                }
-            }
-            if (pinSelect) {
-                pinSelect.innerHTML = '';
-                PIN_POSITIONS.forEach(pin => pinSelect.add(new Option(pin.replace(/-/g, ' '), pin)));
-            }
-            if (clubSelect) {
-                clubSelect.innerHTML = '';
-                CLUBS.forEach(club => clubSelect.add(new Option(club, club)));
-            }
-            if (backspinSelect) {
-                backspinSelect.innerHTML = '';
-                BACKSPIN_OPTIONS.forEach(opt => backspinSelect.add(new Option(opt.text, opt.value)));
-            }
-        }
-
-        // --- Small UI helpers (modals/toasts) ---
-        function createAlertModal(message) {
-            const overlay = document.createElement('div');
-            overlay.className = 'modal-overlay';
-            overlay.innerHTML = `
-                <div class="modal-content">
-                    <p class="mb-4">${message}</p>
-                    <div class="text-right">
-                        <button id="alertOk" class="bg-green-600 px-3 py-1 rounded">OK</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(overlay);
-            document.getElementById('alertOk').addEventListener('click', () => overlay.remove());
-        }
-
-        function showConfirmModal(message, onConfirm) {
-            const overlay = document.createElement('div');
-            overlay.className = 'modal-overlay';
-            overlay.innerHTML = `
-                <div class="modal-content">
-                    <p class="mb-4">${message}</p>
-                    <div class="text-right space-x-2">
-                        <button id="confirmCancel" class="bg-gray-600 px-3 py-1 rounded">Cancel</button>
-                        <button id="confirmOk" class="bg-red-600 px-3 py-1 rounded">Confirm</button>
-                    </div>
-                </div>
-            `;
-            document.body.appendChild(overlay);
-            document.getElementById('confirmCancel').addEventListener('click', () => overlay.remove());
-            document.getElementById('confirmOk').addEventListener('click', () => {
-                onConfirm();
-                overlay.remove();
-            });
-        }
-
-        function showSaveNotification(shot) {
-            const container = document.getElementById('notification-container');
-            if (!container) return;
-            const notif = document.createElement('div');
-            notif.className = 'toast-notification';
-            notif.innerHTML = `
-                <p class="font-bold text-green-400">Shot Saved!</p>
-                <p class="text-sm">Hole ${shot.holeNumber} with ${shot.club} (${shot.power.toFixed(2)})</p>
-            `;
-            container.appendChild(notif);
-            setTimeout(() => { notif.classList.add('show'); }, 10);
-            setTimeout(() => {
-                notif.classList.remove('show');
-                notif.addEventListener('transitionend', () => notif.remove());
-            }, 4000);
-        }
-
-        // --- UI Update Functions ---
-        function updateUI() { updateShotList(); updateStatsPanel(); updateKnownShotsPanel(); updateClubFactorPanel(); }
-
-        function getFilteredShots() {
-            let shots = Object.values(golfData || {});
-            const hole = holeFilter?.value ?? 'all';
-            const pin = pinFilter?.value ?? 'all';
-            const club = clubFilter?.value ?? 'all';
-            if (hole !== 'all') shots = shots.filter(s => s.holeNumber === parseInt(hole));
-            if (pin !== 'all') shots = shots.filter(s => s.pinPosition === pin);
-            if (club !== 'all') shots = shots.filter(s => s.club === club);
-            return shots;
-        }
-
-        function updateShotList(shotsToDisplay = null) {
-            const shots = shotsToDisplay ? shotsToDisplay : getFilteredShots();
-            if (!shotTableBody) return;
-            shotTableBody.innerHTML = '';
-            shots.sort((a, b) => {
-                const aTimestamp = a.timestamp?.seconds || 0;
-                const bTimestamp = b.timestamp?.seconds || 0;
-                return bTimestamp - aTimestamp;
-            }).forEach(shot => {
-                const tr = document.createElement('tr');
-                tr.className = 'border-b border-gray-700 hover:bg-gray-700';
-                tr.innerHTML = `
-                    <td class="p-3 text-center">${shot.holeNumber}</td>
-                    <td class="p-3 whitespace-nowrap">${(shot.pinPosition||'').replace(/-/g, ' ')}</td>
-                    <td class="p-3 whitespace-nowrap">${shot.club}</td>
-                    <td class="p-3 text-center">${Number(shot.power).toFixed(2)}</td>
-                    <td class="p-3 text-center">${Number(shot.yardage || 0).toFixed(1)}y</td>
-                    <td class="p-3 whitespace-nowrap">${Number(shot.windSpeed).toFixed(2)}mph @ ${Number(shot.windAngle).toFixed(0)}°</td>
-                    <td class="p-3">${shot.isHoleInOne ? 'HIO!' : (Number(shot.resultDistance).toFixed(1) + 'y')}</td>
-                    <td class="p-3 whitespace-nowrap">${getBackspinText(shot.backspin)}</td>
-                    <td class="p-3 max-w-xs text-gray-400 italic break-words">${shot.notes || ''}</td>
-                    <td class="p-3 whitespace-nowrap text-right">
-                        <button onclick="editShot('${shot.id}')" class="text-blue-400 hover:text-blue-500 mr-2">Edit</button>
-                        <button onclick="deleteShot('${shot.id}')" class="text-red-400 hover:text-red-500">Delete</button>
-                    </td>
-                `;
-                shotTableBody.appendChild(tr);
-            });
-            if (shots.length === 0) {
-                shotTableBody.innerHTML = '<tr><td colspan="10" class="p-4 text-center text-gray-500">No shots logged yet.</td></tr>';
-            }
-        }
-
-        function updateStatsPanel() {
-            const shots = getFilteredShots();
-            const totalShots = shots.length;
-            const holeInOnes = shots.filter(s => s.isHoleInOne).length;
-            const successRate = totalShots > 0 ? ((holeInOnes / totalShots) * 100).toFixed(1) : '0.0';
-            if (totalShotsDisplay) totalShotsDisplay.textContent = totalShots;
-            if (successRateDisplay) successRateDisplay.textContent = `${successRate}%`;
-        }
-
-        function updateKnownShotsPanel() {
-            const holeNumber = predHoleNumberInput?.value;
-            const pinPosition = predPinPositionInput?.value;
-            if (!knownShotsPanel) return;
-            if (!holeNumber || !pinPosition) {
-                knownShotsPanel.innerHTML = '<p class="text-gray-400">Select a Hole and Pin to see known shots.</p>';
-                return;
-            }
-            const knownShots = Object.values(golfData).filter(shot =>
-                shot.holeNumber === parseInt(holeNumber) && shot.pinPosition === pinPosition
-            );
-            if (knownShots.length > 0) {
-                knownShotsPanel.innerHTML = `<h4 class="text-lg font-semibold mb-2">Known Shots for Hole ${holeNumber} - ${pinPosition.replace(/-/g, ' ')} (${knownShots.length} found)</h4>`;
-                const list = document.createElement('ul');
-                list.className = 'list-disc list-inside text-sm text-gray-400';
-                knownShots.forEach(shot => {
-                    const li = document.createElement('li');
-                    li.textContent = `Club: ${shot.club}, Power: ${Number(shot.power).toFixed(2)}, Wind: ${Number(shot.windSpeed).toFixed(2)}mph @ ${Number(shot.windAngle).toFixed(0)}°, Result: ${shot.isHoleInOne ? 'HIO!' : Number(shot.resultDistance).toFixed(1) + 'y'}, Aim: ${Number(shot.aimSquares).toFixed(2)} squares`;
-                    list.appendChild(li);
-                });
-                knownShotsPanel.appendChild(list);
-            } else {
-                knownShotsPanel.innerHTML = '<p class="text-gray-400">No known shots for this Hole & Pin combination.</p>';
-            }
-        }
-
-        // --- Club Factor Panel ---
-        async function updateClubFactorPanel() {
-            if (!clubFactorTableBody) return;
-
-            const holeNumber = clubFactorHoleSelect?.value;
-            const pinPosition = clubFactorPinSelect?.value;
-            const club = clubFactorClubSelect?.value;
-
-            if (!holeNumber || !pinPosition || !club) {
-                clubFactorTableBody.innerHTML = '<tr><td colspan="4" class="p-3 text-center text-gray-500">Select hole, pin and club to generate AIM table.</td></tr>';
-                return;
-            }
-
-            // Use wind values from the Log New Shot form (as requested)
-            const formWindSpeed = parseFloat(document.getElementById('windSpeed')?.value || 0);
-            const formWindAngle = parseFloat(document.getElementById('windAngle')?.value || 0);
-            const angleRad = formWindAngle * Math.PI / 180;
-
-            const trueCrosswind = formWindSpeed * Math.sin(angleRad); // positive = cross from right (pushes left)
-            const trueHeadTail = formWindSpeed * Math.cos(angleRad);  // positive = tailwind, negative = headwind
-
-            // Display the true wind components above the table (replace current content of first row area)
-            const headerRowHtml = `
-                <tr class="bg-gray-800">
-                    <td class="p-3" colspan="4">
-                        <strong>True Crosswind:</strong> ${trueCrosswind.toFixed(3)} mph &nbsp;&nbsp;
-                        <strong>Head/Tailwind:</strong> ${trueHeadTail.toFixed(3)} mph
-                    </td>
-                </tr>
-            `;
-
-            // Build 20 rows for powers 2.5 -> 4.0 in 0.1 increments
-            let rowsHtml = '';
-            for (let i = 0; i < 20; i++) {
-                const power = +(2.5 + i * 0.1).toFixed(1); // 2.5 .. 4.4? ensure stops at 4.4? user asked 2.5-4.0 => stop at 4.0
-                // adjust to stop at 4.0 exactly (20 rows: (4.0-2.5)/0.1 + 1 = 16? User asked 20 rows; to match request we will produce exactly 20 rows from 2.5 to 4.4 inclusive)
-                // BUT you explicitly requested 2.5 to 4.0 earlier. To meet both: create 16 rows from 2.5 to 4.0 (inclusive) -- user also later demanded 20 rows. We'll follow the latest explicit: 20 rows.
-                // So powers are 2.5 .. 4.4 (20 increments). Use the multiplier key per power.
-                const pKey = power.toFixed(1);
-                const factorKey = `${holeNumber}_${pinPosition}_${club}_${pKey}`;
-                // prefer saved factor if exists, otherwise base multiplier for club name
-                const savedMult = (clubFactors[factorKey] !== undefined) ? clubFactors[factorKey] : (BASE_MULTIPLIERS[club] ?? 1.0);
-                const aim = trueCrosswind * savedMult;
-                const equationText = `${trueCrosswind.toFixed(3)} × ${savedMult.toFixed(3)}`;
-                rowsHtml += `
-                    <tr class="border-b border-gray-700">
-                        <td class="p-2 text-center">${pKey}</td>
-                        <td class="p-2 text-sm">${equationText}</td>
-                        <td class="p-2 text-center">${aim.toFixed(3)}</td>
-                        <td class="p-2 text-center">
-                            <span contenteditable="true" class="editable-num" data-key="${factorKey}" onblur="saveClubMultiplierFromCell(this)">${savedMult.toFixed(3)}</span>
-                        </td>
-                    </tr>
-                `;
-            }
-
-            clubFactorTableBody.innerHTML = headerRowHtml + rowsHtml;
-        }
-
-        // Save multiplier (called from contenteditable cell onblur)
-        window.saveClubMultiplierFromCell = async function(cell) {
-            const raw = cell.innerText.trim();
-            const key = cell.getAttribute('data-key');
-            const val = parseFloat(raw);
-            if (isNaN(val)) {
-                // revert to previous if invalid
-                cell.innerText = (clubFactors[key] !== undefined ? Number(clubFactors[key]).toFixed(3) : '0.000');
-                return;
-            }
-            // Save locally and to Firestore (overwrite previous)
-            clubFactors[key] = val;
-            if (!userId) {
-                // not logged in yet — keep local mapping and return
-                return;
-            }
-            try {
-                const docRef = doc(db, `artifacts/${appId}/users/${userId}/clubFactors`, key);
-                await setDoc(docRef, { factor: val, timestamp: serverTimestamp() }, { merge: true });
-                // Update equation display immediately if present
-                updateClubFactorPanel();
-            } catch (err) {
-                console.error('Error saving club multiplier:', err);
-            }
-        };
-
-        // --- Export / Import (unchanged) ---
-        function exportData() {
-            const dataToExport = {
-                shots: golfData,
-                clubFactors: clubFactors
-            };
-            const dataStr = JSON.stringify(dataToExport, null, 2);
-            const blob = new Blob([dataStr], { type: "application/json" });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `mr-e-machine-data-${new Date().toISOString()}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-        }
-
-        async function importData() {
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.accept = '.json';
-            input.onchange = async (event) => {
-                const file = event.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = async (e) => {
-                    try {
-                        const importedData = JSON.parse(e.target.result);
-                        const newShots = Object.values(importedData.shots || {});
-                        if (newShots.length === 0) {
-                            if (statusMessage) statusMessage.textContent = "No shots found in the file.";
-                            return;
-                        }
-                        const batch = writeBatch(db);
-                        newShots.forEach(shot => {
-                            const docRef = doc(collection(db, `artifacts/${appId}/users/${userId}/shots`));
-                            batch.set(docRef, { ...shot, timestamp: serverTimestamp() });
-                        });
-                        await batch.commit();
-                        if (statusMessage) statusMessage.textContent = `Successfully imported ${newShots.length} shots.`;
-                    } catch (error) {
-                        console.error("Import failed:", error);
-                        if (statusMessage) statusMessage.textContent = "Error importing data. Make sure the file is a valid JSON.";
-                    }
-                };
-                reader.readAsText(file);
-            };
-            input.click();
-        }
-
-        // --- Form Submission: Log New Shot (unchanged except yardage handled already) ---
-        async function handleShotFormSubmit(e) {
-            e.preventDefault();
-            const formData = new FormData(shotForm);
-            const isHoleInOne = formData.get('holeInOne') === 'on';
-            let powerVal = parseFloat(formData.get('power'));
-            if (isNaN(powerVal)) powerVal = 0;
-            // enforce 0.00 - 4.00
-            powerVal = Math.max(0, Math.min(4, Number(powerVal.toFixed(2))));
-
-            const shotData = {
-                holeNumber: parseInt(formData.get('holeNumber')),
-                yardage: parseFloat(formData.get('yardage')),
-                pinPosition: formData.get('pinPosition'),
-                club: formData.get('club'),
-                power: powerVal,
-                windSpeed: parseFloat(formData.get('windSpeed')),
-                windAngle: parseFloat(formData.get('windAngle')),
-                aimSquares: parseFloat(formData.get('aimSquares')), // aim squares with decimals allowed (negative ok)
-                backspin: parseInt(formData.get('backspin')),
-                resultDistance: parseFloat(formData.get('resultDistance')),
-                isHoleInOne: isHoleInOne,
-                notes: formData.get('notes'),
-                timestamp: serverTimestamp()
-            };
-            try {
-                const docRef = doc(collection(db, `artifacts/${appId}/users/${userId}/shots`));
-                await setDoc(docRef, shotData);
-                showSaveNotification(shotData);
-                shotForm.reset();
-            } catch (error) {
-                console.error("Error saving shot:", error);
-                if (statusMessage) statusMessage.textContent = "Error saving shot.";
-            }
-        }
-
-        // --- Edit & Delete Functions (unchanged except yardage handling) ---
-        window.editShot = async function(id) {
-            if (!id) return;
-            try {
-                const shotDocRef = doc(db, `artifacts/${appId}/users/${userId}/shots`, id);
-                const shotSnap = await getDoc(shotDocRef);
-                if (!shotSnap.exists()) {
-                    createAlertModal("Shot not found.");
-                    return;
-                }
-                const shot = { id: shotSnap.id, ...shotSnap.data() };
-                currentEditingShotId = shot.id;
-                document.getElementById('editHoleNumber').value = shot.holeNumber || 1;
-                document.getElementById('editYardage').value = shot.yardage ?? '';
-                document.getElementById('editPinPosition').value = shot.pinPosition ?? PIN_POSITIONS[0];
-                document.getElementById('editClub').value = shot.club ?? CLUBS[0];
-                document.getElementById('editPower').value = Number(shot.power ?? 0).toFixed(2);
-                document.getElementById('editWindSpeed').value = Number(shot.windSpeed ?? 0).toFixed(2);
-                document.getElementById('editWindAngle').value = Number(shot.windAngle ?? 0).toFixed(2);
-                document.getElementById('editAimSquares').value = Number(shot.aimSquares ?? 0).toFixed(2);
-                document.getElementById('editBackspin').value = shot.backspin ?? 0;
-                document.getElementById('editResultDistance').value = Number(shot.resultDistance ?? 0).toFixed(2);
-                document.getElementById('editHoleInOne').checked = !!shot.isHoleInOne;
-                document.getElementById('editNotes').value = shot.notes ?? '';
-                document.getElementById('editModalOverlay').style.display = 'flex';
-            } catch (error) {
-                console.error("Error fetching shot for edit:", error);
-                createAlertModal("Error fetching shot for edit.");
-            }
-        };
-
-        window.deleteShot = function(id) {
-            if (!id) return;
-            showConfirmModal("Are you sure you want to delete this shot? This action cannot be undone.", async () => {
-                try {
-                    const docRef = doc(db, `artifacts/${appId}/users/${userId}/shots`, id);
-                    await deleteDoc(docRef);
-                    if (statusMessage) statusMessage.textContent = "Shot deleted.";
-                } catch (error) {
-                    console.error("Error deleting shot:", error);
-                    if (statusMessage) statusMessage.textContent = "Error deleting shot.";
-                }
-            });
-        };
-
-        // Save edited shot (unchanged)
-        async function saveEditedShot() {
-            if (!currentEditingShotId) return;
-            try {
-                let powerVal = parseFloat(document.getElementById('editPower').value);
-                if (isNaN(powerVal)) powerVal = 0;
-                powerVal = Math.max(0, Math.min(4, Number(powerVal.toFixed(2))));
-
-                const updated = {
-                    holeNumber: parseInt(document.getElementById('editHoleNumber').value),
-                    yardage: parseFloat(document.getElementById('editYardage').value),
-                    pinPosition: document.getElementById('editPinPosition').value,
-                    club: document.getElementById('editClub').value,
-                    power: powerVal,
-                    windSpeed: parseFloat(document.getElementById('editWindSpeed').value),
-                    windAngle: parseFloat(document.getElementById('editWindAngle').value),
-                    aimSquares: parseFloat(document.getElementById('editAimSquares').value),
-                    backspin: parseInt(document.getElementById('editBackspin').value),
-                    resultDistance: parseFloat(document.getElementById('editResultDistance').value),
-                    isHoleInOne: document.getElementById('editHoleInOne').checked,
-                    notes: document.getElementById('editNotes').value,
-                    timestamp: serverTimestamp()
-                };
-                const docRef = doc(db, `artifacts/${appId}/users/${userId}/shots`, currentEditingShotId);
-                await updateDoc(docRef, updated);
-                document.getElementById('editModalOverlay').style.display = 'none';
-                currentEditingShotId = null;
-                if (statusMessage) statusMessage.textContent = "Shot updated.";
-            } catch (error) {
-                console.error("Error saving edited shot:", error);
-                if (statusMessage) statusMessage.textContent = "Error saving edited shot.";
-            }
-        }
-
-        function closeEditModal() {
-            document.getElementById('editModalOverlay').style.display = 'none';
-            currentEditingShotId = null;
-        }
-
-        // Attach functions to window where necessary
-        window.saveEditedShot = saveEditedShot;
-        window.closeEditModal = closeEditModal;
-
-        // --- DOM Ready wiring ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // assign DOM refs
-            shotForm = document.getElementById('shotForm');
-            shotTableBody = document.querySelector('#shotTable tbody');
-            holeFilter = document.getElementById('holeFilter');
-            pinFilter = document.getElementById('pinFilter');
-            clubFilter = document.getElementById('clubFilter');
-            statusMessage = document.getElementById('status-message');
-            totalShotsDisplay = document.getElementById('total-shots');
-            successRateDisplay = document.getElementById('success-rate');
-            importButton = document.getElementById('importButton');
-            exportButton = document.getElementById('exportButton');
-            predHoleNumberInput = document.getElementById('predHoleNumberInput');
-            predPinPositionInput = document.getElementById('predPinPositionInput');
-            knownShotsPanel = document.getElementById('knownShotsPanel');
-            totalShotsCounter = document.getElementById('total-shots-counter');
-
-            clubFactorForm = document.getElementById('clubFactorForm');
-            clubFactorHoleSelect = document.getElementById('clubFactorHole');
-            clubFactorPinSelect = document.getElementById('clubFactorPin');
-            clubFactorClubSelect = document.getElementById('clubFactorClub');
-            clubFactorPowerInput = document.getElementById('clubFactorPower');
-            clubFactorTableBody = document.getElementById('clubFactorTableBody');
-            clubFactorSaveButton = document.getElementById('clubFactorSave');
-
-            // populate dropdowns in the form(s)
-            populateDropdowns('');
-            // fill Optimal Shot Prediction dropdowns
-            const predHoleSelect = document.getElementById('predHoleNumberInput');
-            if (predHoleSelect) {
-                predHoleSelect.innerHTML = '';
-                for (let i = 1; i <= NUM_HOLES; i++) predHoleSelect.add(new Option(`Hole ${i}`, i));
-            }
-            const predPinSelect = document.getElementById('predPinPositionInput');
-            if (predPinSelect) {
-                predPinSelect.innerHTML = '';
-                PIN_POSITIONS.forEach(pin => predPinSelect.add(new Option(pin.replace(/-/g, ' '), pin)));
-            }
-            // populate filter dropdowns
-            if (holeFilter) {
-                holeFilter.innerHTML = '<option value="all">All Holes</option>';
-                for (let i = 1; i <= NUM_HOLES; i++) holeFilter.add(new Option(`Hole ${i}`, i));
-            }
-            if (pinFilter) {
-                pinFilter.innerHTML = '<option value="all">All Pins</option>';
-                PIN_POSITIONS.forEach(pin => pinFilter.add(new Option(pin.replace(/-/g, ' '), pin)));
-            }
-            if (clubFilter) {
-                clubFilter.innerHTML = '<option value="all">All Clubs</option>';
-                CLUBS.forEach(club => clubFilter.add(new Option(club, club)));
-            }
-            // club factor selects
-            const clubFactorHoleF = document.getElementById('clubFactorHole');
-            if (clubFactorHoleF) { clubFactorHoleF.innerHTML = ''; for (let i=1;i<=NUM_HOLES;i++) clubFactorHoleF.add(new Option(`Hole ${i}`, i)); }
-            const clubFactorPinF = document.getElementById('clubFactorPin');
-            if (clubFactorPinF) { clubFactorPinF.innerHTML = ''; PIN_POSITIONS.forEach(pin => clubFactorPinF.add(new Option(pin.replace(/-/g, ' '), pin))); }
-            const clubFactorClubF = document.getElementById('clubFactorClub');
-            if (clubFactorClubF) { clubFactorClubF.innerHTML = ''; CLUBS.forEach(club => clubFactorClubF.add(new Option(club, club))); }
-
-            // event handlers
-            if (shotForm) shotForm.addEventListener('submit', handleShotFormSubmit);
-            if (importButton) importButton.addEventListener('click', importData);
-            if (exportButton) exportButton.addEventListener('click', exportData);
-            if (holeFilter) holeFilter.addEventListener('change', updateUI);
-            if (pinFilter) pinFilter.addEventListener('change', updateUI);
-            if (clubFilter) clubFilter.addEventListener('change', updateUI);
-            if (predHoleNumberInput) predHoleNumberInput.addEventListener('change', updateKnownShotsPanel);
-            if (predPinPositionInput) predPinPositionInput.addEventListener('change', updateKnownShotsPanel);
-
-            // club factor listeners
-            if (clubFactorHoleSelect) clubFactorHoleSelect.addEventListener('change', updateClubFactorPanel);
-            if (clubFactorPinSelect) clubFactorPinSelect.addEventListener('change', updateClubFactorPanel);
-            if (clubFactorClubSelect) clubFactorClubSelect.addEventListener('change', updateClubFactorPanel);
-            if (clubFactorPowerInput) clubFactorPowerInput.addEventListener('input', () => {
-                const val = parseFloat(clubFactorPowerInput.value || 0);
-                if (!isNaN(val)) clubFactorPowerInput.value = val.toFixed(2);
-                updateClubFactorPanel();
-            });
-
-            // initialize firebase
-            init();
+        onAuthStateChanged(auth, user => {
+          if(user){
+            userId = user.uid;
+            attachRealtime();
+            populateUI();
+          }
         });
-    </script>
-</head>
-<body class="bg-gray-900 text-white font-sans p-4 md:p-8">
-    <div class="max-w-screen-2xl mx-auto">
-        <div class="text-center mb-6">
-            <h1 class="text-4xl font-bold text-center text-green-500 tracking-wider">Mr. E Machine</h1>
-            <h2 class="text-xl text-center text-green-400 font-mono mb-2">Yabba Dabba Doo! HIO for you.</h2>
-            <p class="text-sm text-gray-400">Total Shots Saved: <span id="total-shots-counter" class="font-bold text-white">0</span></p>
-        </div>
+      }catch(e){
+        console.error('Firebase init failed', e);
+      }
+    }
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">Log a New Shot 🏌️</h2>
-                <form id="shotForm" class="space-y-4">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div><label for="holeNumber" class="block text-sm font-medium text-gray-300">Hole</label><select name="holeNumber" id="holeNumber" required class="mt-1 block w-full bg-gray-700 rounded-md p-2"></select></div>
-                        <div><label for="yardage" class="block text-sm font-medium text-gray-300">Yardage</label><input name="yardage" type="number" step="0.01" id="yardage" required class="mt-1 block w-full bg-gray-700 rounded-md p-2"></div>
-                    </div>
-                    <div><label for="pinPosition" class="block text-sm font-medium text-gray-300">Pin</label><select name="pinPosition" id="pinPosition" required class="mt-1 block w-full bg-gray-700 rounded-md p-2"></select></div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div><label for="club" class="block text-sm font-medium text-gray-300">Club</label><select name="club" id="club" required class="mt-1 block w-full bg-gray-700 rounded-md p-2"></select></div>
-                        <div><label for="power" class="block text-sm font-medium text-gray-300">Power (0.00-4.00)</label><input name="power" type="number" step="0.01" min="0" max="4" id="power" required class="mt-1 block w-full bg-gray-700 rounded-md p-2"></div>
-                    </div>
-                    <div class="grid grid-cols-2 gap-4">
-                        <div><label for="windSpeed" class="block text-sm font-medium text-gray-300">Wind (mph)</label><input name="windSpeed" type="number" step="0.01" id="windSpeed" required class="mt-1 block w-full bg-gray-700 rounded-md p-2"></div>
-                        <div><label for="windAngle" class="block text-sm font-medium text-gray-300">Wind Angle (°)</label><input name="windAngle" type="number" step="0.01" id="windAngle" required class="mt-1 block w-full bg-gray-700 rounded-md p-2"></div>
-                    </div>
-                    <div>
-                        <label for="aimSquares" class="block text-sm font-medium text-gray-300">Aim (squares)</label>
-                        <!-- Allow negative and 2 decimal places -->
-                        <input name="aimSquares" type="number" step="0.01" id="aimSquares" required class="mt-1 block w-full bg-gray-700 rounded-md p-2">
-                    </div>
-                    <div><label for="backspin" class="block text-sm font-medium text-gray-300">Backspin</label><select name="backspin" id="backspin" required class="mt-1 block w-full bg-gray-700 rounded-md p-2"></select></div>
-                    <div class="flex items-center gap-4">
-                        <label for="resultDistance" class="block text-sm font-medium text-gray-300">Result (yards)</label>
-                        <input name="resultDistance" type="number" id="resultDistance" step="0.01" required class="block w-full bg-gray-700 rounded-md p-2">
-                        <div class="flex items-center">
-                            <input name="holeInOne" id="holeInOne" type="checkbox" class="h-4 w-4 rounded border-gray-600 bg-gray-700 text-green-500 focus:ring-green-600">
-                            <label for="holeInOne" class="ml-2 block text-sm text-gray-300">Hole in One!</label>
-                        </div>
-                    </div>
-                    <div>
-                      <label for="notes" class="block text-sm font-medium text-gray-300">Notes</label>
-                      <textarea name="notes" id="notes" rows="2" class="mt-1 block w-full bg-gray-700 rounded-md p-2"></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Log Shot</button>
-                </form>
-            </div>
+    function attachRealtime(){
+      const shotsQuery = query(collection(db, `artifacts/${appId}/users/${userId}/shots`));
+      onSnapshot(shotsQuery, (snapshot) => {
+        golfData = {};
+        snapshot.forEach(docSnap => {
+          golfData[docSnap.id] = { id: docSnap.id, ...docSnap.data() };
+        });
+        updateStats();
+        renderHistory();
+      });
 
-            <div class="space-y-6">
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <h2 class="text-2xl font-semibold mb-4 border-b border-gray-700 pb-2">Optimal Shot Prediction 🔮</h2>
-                    <form id="predictionForm" class="space-y-4">
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><label for="predHoleNumberInput" class="block text-sm font-medium text-gray-300">Hole</label><select id="predHoleNumberInput" required class="mt-1 block w-full bg-gray-700 rounded-md p-2"></select></div>
-                            <div><label for="predYardage" class="block text-sm font-medium text-gray-300">Yardage</label><input type="number" id="predYardage" step="0.01" required class="mt-1 block w-full bg-gray-700 rounded-md p-2"></div>
-                        </div>
-                        <div><label for="predPinPositionInput" class="block text-sm font-medium text-gray-300">Pin</label><select id="predPinPositionInput" required class="mt-1 block w-full bg-gray-700 rounded-md p-2"></select></div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div><label for="predWindSpeed" class="block text-sm font-medium text-gray-300">Wind (mph)</label><input type="number" id="predWindSpeed" step="0.01" required class="mt-1 block w-full bg-gray-700 rounded-md p-2"></div>
-                            <div><label for="predWindAngle" class="block text-sm font-medium text-gray-300">Wind Angle (°)</label><input type="number" id="predWindAngle" step="0.01" required class="mt-1 block w-full bg-gray-700 rounded-md p-2"></div>
-                        </div>
-                        <button type="button" id="optimalPredictButton" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Get Prediction</button>
-                    </form>
+      const cfQuery = query(collection(db, `artifacts/${appId}/users/${userId}/clubFactors`));
+      onSnapshot(cfQuery, (snapshot) => {
+        clubFactors = {};
+        snapshot.forEach(docSnap => {
+          clubFactors[docSnap.id] = docSnap.data().factor;
+        });
+        buildCFTable();
+      });
 
-                    <div id="knownShotsPanel" class="mt-4 p-4 bg-gray-700/50 border border-gray-600 rounded-lg"></div>
-                    <div id="optimalPredictionPanel" class="mt-4 p-4 bg-gray-700 rounded-lg" style="display: none;"></div>
-                </div>
+      const notesQuery = query(collection(db, `artifacts/${appId}/users/${userId}/holeNotes`));
+      onSnapshot(notesQuery, (snapshot) => {
+        holeNotesCache = {};
+        snapshot.forEach(docSnap => {
+          holeNotesCache[docSnap.id] = docSnap.data().note || '';
+        });
+        loadHoleNotesUI();
+      });
 
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <h3 class="text-xl font-semibold mb-4 border-b border-gray-700 pb-2">Data Management 💾</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                        <button id="exportButton" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">Export</button>
-                        <button id="importButton" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">Import</button>
-                        <button id="clearButton" class="bg-red-700 hover:bg-red-800 text-white font-bold py-2 px-4 rounded">Clear All</button>
-                    </div>
-                    <div id="status-message" class="text-sm text-gray-400 mt-4 text-center"></div>
-                    <div id="user-id-display" class="text-xs text-gray-600 mt-2 text-center"></div>
-                </div>
-            </div>
+      const daQuery = query(collection(db, `artifacts/${appId}/users/${userId}/driverAim`));
+      onSnapshot(daQuery, (snapshot) => {});
+    }
 
-            <div class="space-y-6">
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <h3 class="text-xl font-semibold mb-4 border-b border-gray-700 pb-2">Club Factor ⚙️</h3>
-                    <form id="clubFactorForm" class="space-y-4">
-                        <div><label for="clubFactorHole" class="block text-sm font-medium text-gray-300">Hole</label><select id="clubFactorHole" class="mt-1 block w-full bg-gray-700 rounded-md p-2"></select></div>
-                        <div><label for="clubFactorPin" class="block text-sm font-medium text-gray-300">Pin</label><select id="clubFactorPin" class="mt-1 block w-full bg-gray-700 rounded-md p-2"></select></div>
-                        <div><label for="clubFactorClub" class="block text-sm font-medium text-gray-300">Club</label><select id="clubFactorClub" class="mt-1 block w-full bg-gray-700 rounded-md p-2"></select></div>
-                        <div><label for="clubFactorPower" class="block text-sm font-medium text-gray-300">Power (for quick reference)</label><input type="number" id="clubFactorPower" step="0.05" value="4.00" min="0" max="4" required class="mt-1 block w-full bg-gray-700 rounded-md p-2"></div>
-                    </form>
-                    <div class="mt-4 overflow-x-auto">
-                        <table class="w-full text-sm">
-                            <thead class="text-xs text-gray-400 uppercase bg-gray-700">
-                                <tr>
-                                    <th scope="col" class="p-3">Power</th>
-                                    <th scope="col" class="p-3">Equation (TrueCross × Mult)</th>
-                                    <th scope="col" class="p-3">Aim Result</th>
-                                    <th scope="col" class="p-3">Club Multiplier (editable)</th>
-                                </tr>
-                            </thead>
-                            <tbody id="clubFactorTableBody">
-                                <tr><td colspan="4" class="p-4 text-center text-gray-500">Select hole, pin and club to generate AIM table.</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <h3 class="text-xl font-semibold mb-4 border-b border-gray-700 pb-2">Filter & Analysis 📊</h3>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        <div><label for="holeFilter" class="block text-sm text-gray-300">Hole</label><select id="holeFilter" class="mt-1 block w-full bg-gray-700 rounded-md p-2"></select></div>
-                        <div><label for="pinFilter" class="block text-sm text-gray-300">Pin</label><select id="pinFilter" class="mt-1 block w-full bg-gray-700 rounded-md p-2"></select></div>
-                        <div><label for="clubFilter" class="block text-sm text-gray-300">Club</label><select id="clubFilter" class="mt-1 block w-full bg-gray-700 rounded-md p-2"></select></div>
-                    </div>
-                </div>
-                <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
-                    <h3 class="text-xl font-semibold mb-4 border-b border-gray-700 pb-2">Filtered Stats</h3>
-                    <div id="statsPanel" class="grid grid-cols-2 gap-4 text-center">
-                        <div><span class="text-2xl font-bold text-green-400" id="total-shots">0</span><p class="text-sm text-gray-400">Total Shots</p></div>
-                        <div><span class="text-2xl font-bold text-green-400" id="success-rate">0.0%</span><p class="text-sm text-gray-400">Success Rate</p></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    function populateUI(){
+      holeNumber.innerHTML = ''; predHole.innerHTML=''; cfHole.innerHTML=''; daHole.innerHTML=''; fHole.innerHTML='<option value="all">All</option>';
+      for(let i=1;i<=21;i++){ holeNumber.appendChild(opt(`Hole ${i}`, i)); predHole.appendChild(opt(`Hole ${i}`, i)); cfHole.appendChild(opt(`Hole ${i}`, i)); daHole.appendChild(opt(`Hole ${i}`, i)); fHole.appendChild(opt(`Hole ${i}`, i)); }
+      pinPosition.innerHTML=''; predPin.innerHTML=''; cfPin.innerHTML=''; fPin.innerHTML='<option value="all">All</option>';
+      PINS.forEach(p=>{ const label=p.replace(/-/g,' '); pinPosition.appendChild(opt(label, p)); predPin.appendChild(opt(label, p)); cfPin.appendChild(opt(label, p)); fPin.appendChild(opt(label, p)); });
+      club.innerHTML=''; cfClub.innerHTML='';
+      CLUBS.forEach(c=> { club.appendChild(opt(c,c)); cfClub.appendChild(opt(c,c)); });
+      backspin.innerHTML=''; BACKSPIN.forEach(b=> backspin.appendChild(opt(b.text, b.value)));
+      if(!cfPower.value) cfPower.value = "2.50";
+      loadHoleNotesUI();
+      loadDriverAimUI();
+    }
 
-        <div class="mt-8 bg-gray-800 p-2 md:p-6 rounded-lg shadow-lg">
-            <h2 class="text-2xl font-semibold mb-4 px-4 md:px-0">Shot History</h2>
-            <div class="overflow-x-auto">
-                <table id="shotTable" class="w-full text-sm text-left">
-                    <thead class="text-xs text-gray-400 uppercase bg-gray-700">
-                        <tr>
-                            <th scope="col" class="p-3 text-center">Hole</th>
-                            <th scope="col" class="p-3">Pin</th>
-                            <th scope="col" class="p-3">Club</th>
-                            <th scope="col" class="p-3 text-center">Power</th>
-                            <th scope="col" class="p-3 text-center">Yardage</th>
-                            <th scope="col" class="p-3">Wind</th>
-                            <th scope="col" class="p-3">Result</th>
-                            <th scope="col" class="p-3">Spin</th>
-                            <th scope="col" class="p-3">Notes</th>
-                            <th scope="col" class="p-3 text-right">Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
+    function updateStats(){
+      const all = Object.values(golfData);
+      const total = all.length;
+      const hios = all.filter(s=> s.isHoleInOne).length;
+      const rate = total ? ((hios/total)*100).toFixed(1) : '0.0';
+      totalShotsEl.textContent = String(total);
+      hioRateEl.textContent = rate + '%';
+    }
 
-    <!-- Edit Shot Modal -->
-    <div id="editModalOverlay" style="display:none;" class="modal-overlay">
-        <div class="modal-content">
-            <h3 class="text-xl font-semibold mb-4">Edit Shot</h3>
-            <div class="modal-row">
-                <div>
-                    <label class="block text-sm text-gray-300">Hole</label>
-                    <select id="editHoleNumber" class="mt-1 block w-full bg-gray-700 rounded-md p-2"></select>
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-300">Yardage</label>
-                    <input id="editYardage" type="number" step="0.01" class="mt-1 block w-full bg-gray-700 rounded-md p-2" />
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-300">Pin</label>
-                    <select id="editPinPosition" class="mt-1 block w-full bg-gray-700 rounded-md p-2"></select>
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-300">Club</label>
-                    <select id="editClub" class="mt-1 block w-full bg-gray-700 rounded-md p-2"></select>
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-300">Power (0.00-4.00)</label>
-                    <input id="editPower" type="number" step="0.01" min="0" max="4" class="mt-1 block w-full bg-gray-700 rounded-md p-2" />
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-300">Wind (mph)</label>
-                    <input id="editWindSpeed" type="number" step="0.01" class="mt-1 block w-full bg-gray-700 rounded-md p-2" />
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-300">Wind Angle (°)</label>
-                    <input id="editWindAngle" type="number" step="0.01" class="mt-1 block w-full bg-gray-700 rounded-md p-2" />
-                </div>
-                <div> 
-                    <label class="block text-sm text-gray-300">Aim (squares)</label>
-                    <input id="editAimSquares" type="number" step="0.01" class="mt-1 block w-full bg-gray-700 rounded-md p-2" />
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-300">Backspin</label>
-                    <select id="editBackspin" class="mt-1 block w-full bg-gray-700 rounded-md p-2"></select>
-                </div>
-                <div>
-                    <label class="block text-sm text-gray-300">Result (yards)</label>
-                    <input id="editResultDistance" type="number" step="0.01" class="mt-1 block w-full bg-gray-700 rounded-md p-2" />
-                </div>
-                <div style="align-self:center;">
-                    <label class="block text-sm text-gray-300">Hole in One</label>
-                    <input id="editHoleInOne" type="checkbox" class="mt-2 h-4 w-4 rounded border-gray-600 bg-gray-700 text-green-500" />
-                </div>
-                <div style="grid-column: 1 / -1;">
-                    <label class="block text-sm text-gray-300">Notes</label>
-                    <textarea id="editNotes" rows="3" class="mt-1 block w-full bg-gray-700 rounded-md p-2"></textarea>
-                </div>
-            </div>
+    // >>> Updated Shot History filtering logic <<<
+    function renderHistory(){
+      const ctxHole = Number(holeNumber.value||0);
+      const ctxPin  = pinPosition.value;
+      const ctxYRaw = yardage.value;
+      const ctxY    = ctxYRaw === '' ? NaN : Number(ctxYRaw);
 
-            <div class="text-right mt-4">
-                <button onclick="closeEditModal()" class="bg-gray-600 px-4 py-2 rounded mr-2">Cancel</button>
-                <button onclick="saveEditedShot()" class="bg-green-600 px-4 py-2 rounded">Save Changes</button>
-            </div>
-        </div>
-    </div>
+      let list = Object.values(golfData);
 
-    <div id="notification-container" class="fixed bottom-4 right-4 space-y-2 z-50"></div>
+      // Manual filter panel (optional fields)
+      const fHoleV = fHole.value;
+      const fPinV = fPin.value;
+      const yrMin = yMin.value===''? -Infinity : Number(yMin.value);
+      const yrMax = yMax.value===''? +Infinity : Number(yMax.value);
+      const angMin = aMin.value===''? -Infinity : Number(aMin.value);
+      const angMax = aMax.value===''? +Infinity : Number(aMax.value);
+      const spMin = sMin.value===''? -Infinity : Number(sMin.value);
+      const spMax = sMax.value===''? +Infinity : Number(sMax.value);
+      const fLieV = fLie.value;
+      const fDA = fDriverAim.checked;
 
-    <script>
-        // Populate modal dropdowns after html loads (small client-side helper)
-        (function populateModalSelects() {
-            const holeSel = document.getElementById('editHoleNumber');
-            const pinSel = document.getElementById('editPinPosition');
-            const clubSel = document.getElementById('editClub');
-            const backspinSel = document.getElementById('editBackspin');
-            if (holeSel) {
-                holeSel.innerHTML = '';
-                for (let i = 1; i <= 21; i++) holeSel.add(new Option(`Hole ${i}`, i));
-            }
-            if (pinSel) {
-                pinSel.innerHTML = '';
-                const pins = ["front-left","front-middle","front-right","middle-left","middle-middle","middle-right","back-left","back-middle","back-right"];
-                pins.forEach(p => pinSel.add(new Option(p.replace(/-/g,' '), p)));
-            }
-            if (clubSel) {
-                clubSel.innerHTML = '';
-                const clubs = ["Driver","Spoon","3","5","7","9","Wedge","Putter"];
-                clubs.forEach(c => clubSel.add(new Option(c, c)));
-            }
-            if (backspinSel) {
-                backspinSel.innerHTML = '';
-                const opts = [ { text: "none", value: 0 }, { text: "stop", value: 1 }, { text: "a wee bit", value: 2 }, { text: "some", value: 3 }, { text: "MAX!", value: 4 }];
-                opts.forEach(o => backspinSel.add(new Option(o.text, o.value)));
-            }
-        })();
-    </script>
-</body>
-</html>
+      list = list.filter(s=>{
+        if(fHoleV!=='all' && s.holeNumber !== Number(fHoleV)) return false;
+        if(fPinV!=='all' && (s.pinPosition||'').toLowerCase() !== fPinV.toLowerCase()) return false;
+        if(!(Number(s.yardage)>=yrMin && Number(s.yardage)<=yrMax)) return false;
+        if(!(Number(s.windAngle)>=angMin && Number(s.windAngle)<=angMax)) return false;
+        if(!(Number(s.windSpeed)>=spMin && Number(s.windSpeed)<=spMax)) return false;
+        if(fLieV!=='all' && (s.lie||'Fairway') !== fLieV) return false;
+        if(fDA && !s.driverAim) return false;
+        return true;
+      });
+
+      // Contextual filtering from "Log a New Shot" fields:
+      // If Hole + Pin chosen, filter to those. If Yardage entered, narrow to ±10y.
+      if(ctxHole && ctxPin){
+        list = list.filter(s=> s.holeNumber===ctxHole && (s.pinPosition||'').toLowerCase()===ctxPin.toLowerCase());
+        if(!Number.isNaN(ctxY)){
+          list = list.filter(s=> Math.abs(Number(s.yardage)-ctxY) <= 10);
+        }
+      }
+
+      list.sort((a,b)=> (b.timestamp?.seconds||b.timestamp||0) - (a.timestamp?.seconds||a.timestamp||0));
+
+      historyTableBody.innerHTML = '';
+      if(!list.length){
+        historyTableBody.innerHTML = '<tr><td colspan="12" class="text-center muted py-3">No shots match.</td></tr>';
+        return;
+      }
+
+      for(const s of list){
+        const tr = document.createElement('tr');
+        const arrow = `<div class="flex items-center gap-2"><div class="arrow-wrap" style="transform:rotate(${Number(s.windAngle||0)}deg)"><div class="arrow"></div></div><span class="muted">${Number(s.windSpeed).toFixed(2)} mph @ ${Number(s.windAngle).toFixed(0)}°</span></div>`;
+        tr.innerHTML = `
+          <td>${s.holeNumber}</td>
+          <td>${(s.pinPosition||'').replace(/-/g,' ')}</td>
+          <td>${s.club}</td>
+          <td class="text-center">${Number(s.power).toFixed(2)}</td>
+          <td class="text-center">${Number(s.aimSquares||0).toFixed(2)}</td>
+          <td class="text-center">${Number(s.yardage||0).toFixed(1)}y</td>
+          <td>${arrow}</td>
+          <td>${s.isHoleInOne? '<span class="px-2 rounded-full bg-emerald-700 text-emerald-100">HIO!</span>' : (Number(s.resultDistance).toFixed(1)+'y')}</td>
+          <td>${getBackspinText(s.backspin)}</td>
+          <td>${s.lie||'Fairway'}</td>
+          <td class="max-w-[240px]">${s.notes||''}</td>
+          <td class="text-right">
+            <button class="btn-sec btn px-3 py-1" data-edit="${s.id}">Edit</button>
+            <button class="btn-danger btn px-3 py-1 ml-1" data-del="${s.id}">Delete</button>
+          </td>`;
+        historyTableBody.appendChild(tr);
+      }
+    }
+
+    async function saveShot(e){
+      e.preventDefault();
+      const shot = {
+        holeNumber: Number(holeNumber.value),
+        pinPosition: pinPosition.value,
+        yardage: Number(yardage.value||0),
+        club: club.value,
+        power: Number(power.value||0),
+        windSpeed: Number(windSpeed.value||0),
+        windAngle: Number(windAngle.value||0),
+        aimSquares: Number(aimSquares.value||0),
+        backspin: Number(backspin.value||0),
+        resultDistance: Number(resultDistance.value||0),
+        isHoleInOne: !!holeInOne.checked,
+        notes: notes.value||'',
+        lie: lie.value,
+        elevationPct: Number(elevationPct.value||0),
+        excludeFromPrediction: !!excludePrediction.checked,
+        driverAim: !!driverAim.checked,
+        timestamp: serverTimestamp()
+      };
+      const id = crypto.randomUUID();
+      await setDoc(doc(db, `artifacts/${appId}/users/${userId}/shots/${id}`), shot);
+      toastMsg('Shot saved');
+      shotForm.reset();
+      rotate(logWindArrow, 0);
+      updateCFWind();
+      renderHistory(); // ensure the new shot appears according to current filters
+    }
+
+    function predict(){
+      const h = Number(predHole.value||0);
+      const p = predPin.value;
+      const y = predYardage.value==='' ? NaN : Number(predYardage.value);
+      const ws = predWindSpeed.value==='' ? NaN : Number(predWindSpeed.value);
+      const wa = predWindAngle.value==='' ? NaN : Number(predWindAngle.value);
+      rotate(predWindArrow, wa);
+
+      let list = Object.values(golfData).filter(s=> !s.excludeFromPrediction && s.holeNumber===h && s.pinPosition===p);
+      if(!Number.isNaN(y)) list = list.filter(s=> Math.abs(Number(s.yardage) - y) <= 10);
+      list.sort((a,b)=>{
+        const aWin = (a.isHoleInOne || a.resultDistance===0) ? 1:0;
+        const bWin = (b.isHoleInOne || b.resultDistance===0) ? 1:0;
+        if(bWin!==aWin) return bWin - aWin;
+        return Math.abs(Number(a.resultDistance)) - Math.abs(Number(b.resultDistance));
+      });
+      if(!list.length){ predictionResult.innerHTML = '<span class="muted">No matching history for prediction.</span>'; return; }
+      const best = list[0];
+      predictionResult.innerHTML = `
+        <div class="p-3 rounded-md bg-slate-800 border border-slate-700">
+          <div><b>Suggested Club:</b> ${best.club}</div>
+          <div><b>Power:</b> ${Number(best.power).toFixed(2)}</div>
+          <div><b>AIM (squares):</b> ${Number(best.aimSquares).toFixed(2)}</div>
+          <div class="flex items-center gap-2 mt-1"><div class="arrow-wrap" style="transform:rotate(${Number(best.windAngle)}deg)"><div class="arrow"></div></div><span class="muted">${Number(best.windSpeed).toFixed(2)} mph @ ${Number(best.windAngle).toFixed(0)}° (from matched shot)</span></div>
+          <div class="text-xs muted mt-1">Based on previous shots for the selected hole/pin${!Number.isNaN(y)?' within ±10y of entered yardage':''}.</div>
+        </div>`;
+    }
+
+    async function exportAll(){
+      const base = `artifacts/${appId}/users/${userId}`;
+      const [shotsSnap, cfSnap, notesSnap, daSnap] = await Promise.all([
+        getDocs(collection(db, base+'/shots')),
+        getDocs(collection(db, base+'/clubFactors')),
+        getDocs(collection(db, base+'/holeNotes')),
+        getDocs(collection(db, base+'/driverAim')),
+      ]);
+      const pack = {
+        shots: shotsSnap.docs.map(d=> ({id:d.id, ...d.data()})),
+        clubFactors: cfSnap.docs.map(d=> ({id:d.id, ...d.data()})),
+        holeNotes: notesSnap.docs.map(d=> ({id:d.id, ...d.data()})),
+        driverAim: daSnap.docs.map(d=> ({id:d.id, ...d.data()})),
+      };
+      const data = JSON.stringify(pack, null, 2);
+      const blob = new Blob([data], { type:'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `mr-e-machine-export-${new Date().toISOString()}.json`; a.click();
+      URL.revokeObjectURL(url);
+    }
+    async function importAll(){
+      const input = document.createElement('input'); input.type='file'; input.accept='.json,application/json';
+      input.onchange = async (e)=>{
+        const file = e.target.files?.[0]; if(!file) return;
+        const txt = await file.text();
+        let pack;
+        try { pack = JSON.parse(txt); } catch(err){ alert('Invalid JSON'); return; }
+        const base = `artifacts/${appId}/users/${userId}`;
+        const batch = writeBatch(db);
+        (pack.shots||[]).forEach(s=> batch.set(doc(db, base+'/shots/'+(s.id||crypto.randomUUID())), s));
+        (pack.clubFactors||[]).forEach(cf=> batch.set(doc(db, base+'/clubFactors/'+(cf.id||crypto.randomUUID())), cf));
+        (pack.holeNotes||[]).forEach(n=> batch.set(doc(db, base+'/holeNotes/'+(n.id||crypto.randomUUID())), n));
+        (pack.driverAim||[]).forEach(d=> batch.set(doc(db, base+'/driverAim/'+(d.id||crypto.randomUUID())), d));
+        await batch.commit();
+        toastMsg('Import complete');
+      };
+      input.click();
+    }
+
+    function loadHoleNotesUI(){
+      const h = String(cfHole.value||1);
+      cfNotes.value = holeNotesCache[h] || '';
+    }
+    async function saveHoleNote(){
+      const h = String(cfHole.value||1);
+      await setDoc(doc(db, `artifacts/${appId}/users/${userId}/holeNotes/${h}`), { note: cfNotes.value||'' });
+      toastMsg('Hole notes saved');
+    }
+
+    async function loadDriverAimUI(){
+      const h = String(daHole.value||1);
+      const ref = doc(db, `artifacts/${appId}/users/${userId}/driverAim/${h}`);
+      const snap = await getDoc(ref);
+      daNotes.value = (snap.exists() ? (snap.data().note||'') : '');
+    }
+    async function saveDriverAim(){
+      const h = String(daHole.value||1);
+      await setDoc(doc(db, `artifacts/${appId}/users/${userId}/driverAim/${h}`), { note: daNotes.value||'' });
+      toastMsg('Driver AIM note saved');
+    }
+    function newDriverAim(){ daNotes.value=''; }
+    async function deleteDriverAim(){
+      const h = String(daHole.value||1);
+      await deleteDoc(doc(db, `artifacts/${appId}/users/${userId}/driverAim/${h}`));
+      await loadDriverAimUI();
+      toastMsg('Driver AIM note deleted');
+    }
+
+    function keyForCF(hole, pin, club, power){
+      const pwr = Number(power).toFixed(2);
+      return `${hole}_${pin}_${club}_${pwr}`;
+    }
+    function computeCrossAndHeadTail(ws, wa){
+      const rad = (Number(wa)||0) * Math.PI / 180;
+      const cross = (Number(ws)||0) * Math.sin(rad);
+      const headtail = (Number(ws)||0) * Math.cos(rad);
+      return { cross, headtail };
+    }
+    function updateCFWind(){
+      const ws = Number(windSpeed.value||0);
+      const wa = Number(windAngle.value||0);
+      const {cross, headtail} = computeCrossAndHeadTail(ws, wa);
+      cfCrosswind.textContent = cross.toFixed(2);
+      cfHeadTail.textContent = headtail.toFixed(2);
+      rotate(cfArrow, wa);
+      buildCFTable();
+    }
+
+    async function saveFactor(h, p, c, powerValue, factor){
+      const id = keyForCF(h, p, c, powerValue);
+      await setDoc(doc(db, `artifacts/${appId}/users/${userId}/clubFactors/${id}`), { factor: Number(factor) });
+      toastMsg(`Factor saved for ${id}`);
+    }
+
+    function buildCFTable(){
+      cfTableBody.innerHTML = '';
+      const h = Number(cfHole.value||0);
+      const p = cfPin.value;
+      const c = cfClub.value;
+      const basePower = Number(cfPower.value||NaN);
+      const ws = Number(windSpeed.value||0);
+      const wa = Number(windAngle.value||0);
+      const { cross } = computeCrossAndHeadTail(ws, wa);
+
+      if(!h || !p || !c || Number.isNaN(basePower)){
+        cfTableBody.innerHTML = '<tr><td colspan="4" class="muted py-3 text-center">Select hole, pin, club and enter a power value.</td></tr>';
+        return;
+      }
+
+      for(let i=-5;i<=5;i++){
+        const pw = +(basePower + i*0.1).toFixed(2);
+        const key = keyForCF(h, p, c, pw);
+        const factor = (clubFactors[key]!==undefined) ? Number(clubFactors[key]) : 1.00;
+        const aim = factor * cross;
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td class="mono">${pw.toFixed(2)}</td>
+          <td class="mono">${cross.toFixed(2)}</td>
+          <td class="mono">${aim.toFixed(2)}</td>
+          <td class="number-cell">
+            <input data-cfkey="${key}" type="number" step="0.01" value="${factor.toFixed(2)}" class="input" />
+          </td>`;
+        cfTableBody.appendChild(tr);
+      }
+
+      // attach listeners for inputs
+      cfTableBody.querySelectorAll('input[data-cfkey]').forEach(inp=>{
+        inp.addEventListener('change', async (e)=>{
+          const k = e.target.getAttribute('data-cfkey');
+          const val = Number(e.target.value||1);
+          clubFactors[k] = val;
+          await setDoc(doc(db, `artifacts/${appId}/users/${userId}/clubFactors/${k}`), { factor: val });
+          buildCFTable();
+        });
+      });
+    }
+
+    // Events
+    shotForm.addEventListener('submit', saveShot);
+    windAngle.addEventListener('input', ()=> rotate(logWindArrow, windAngle.value));
+    windSpeed.addEventListener('input', updateCFWind);
+    windAngle.addEventListener('input', updateCFWind);
+
+    [cfHole, cfPin, cfClub, cfPower].forEach(el=> el.addEventListener('input', buildCFTable));
+    saveHoleNotes.addEventListener('click', saveHoleNote);
+
+    [fHole, fPin, yMin, yMax, aMin, aMax, sMin, sMax, fLie, fDriverAim].forEach(el=> el.addEventListener('input', renderHistory));
+
+    [predHole, predPin, predYardage, predWindSpeed, predWindAngle].forEach(el=> el.addEventListener('input', ()=> rotate(predWindArrow, predWindAngle.value)));
+    btnPredict.addEventListener('click', predict);
+
+    [daHole].forEach(el=> el.addEventListener('input', loadDriverAimUI));
+    daNew.addEventListener('click', newDriverAim);
+    daSave.addEventListener('click', saveDriverAim);
+    daDelete.addEventListener('click', deleteDriverAim);
+
+    document.getElementById('btnExport').addEventListener('click', exportAll);
+    document.getElementById('btnImport').addEventListener('click', importAll);
+
+    initFirebase();
+  </script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body></html>
